@@ -11,8 +11,6 @@ pub(crate) type DoubleDigit = u128;
 
 pub(crate) const BITS: u32 = Digit::BITS;
 
-pub(crate) const DIGITS: usize = std::mem::size_of::<Digit>() * 2;
-
 pub struct Number {
     data: Vec<Digit>,
 }
@@ -20,13 +18,15 @@ pub struct Number {
 impl Number {
     pub fn new(input: &str) -> Number {
         let input_size = input.chars().count();
-        let capacity = (input_size + DIGITS - 1) / DIGITS;
+        let digit_count = std::mem::size_of::<Digit>() * 2;
+        let capacity = (input_size + digit_count - 1) / digit_count;
         let mut result_data = Vec::with_capacity(capacity);
 
-        for index in (0..=input_size).rev().step_by(DIGITS) {
-            if index >= DIGITS {
-                result_data.push(Digit::from_str_radix(&input[index - DIGITS..index], 16).unwrap());
-            } else if input_size % DIGITS != 0 {
+        for index in (0..=input_size).rev().step_by(digit_count) {
+            if index >= digit_count {
+                result_data
+                    .push(Digit::from_str_radix(&input[index - digit_count..index], 16).unwrap());
+            } else if input_size % digit_count != 0 {
                 result_data.push(Digit::from_str_radix(&input[0..index], 16).unwrap());
             }
         }

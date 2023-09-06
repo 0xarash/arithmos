@@ -25,7 +25,6 @@ impl Sub for Number {
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;

@@ -40,7 +40,6 @@ pub(crate) fn muladd(digit1: Digit, digit2: Digit, acc: Digit) -> (Digit, Digit)
     (result as Digit, (result >> BITS) as Digit)
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;

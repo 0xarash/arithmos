@@ -1,7 +1,7 @@
 use crate::{Digit, Number};
 
 impl Number {
-    fn pow(self, exp: Digit) -> Number {
+    pub fn pow(self, exp: Digit) -> Number {
         let mut result = Number::new("1");
         let mut base = self.clone();
         let mut e = exp;

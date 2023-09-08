@@ -4,10 +4,10 @@ use crate::{Digit, DoubleDigit, Number, BITS};
 
 use super::addition::adc;
 
-impl Mul for Number {
+impl Mul<&Number> for &Number {
     type Output = Number;
 
-    fn mul(self, rhs: Number) -> Number {
+    fn mul(self, rhs: &Number) -> Number {
         let limbs = self.data.len() + rhs.data.len();
         let mut result_data = vec![0; limbs];
 
@@ -32,6 +32,30 @@ impl Mul for Number {
     }
 }
 
+impl Mul<&Number> for Number {
+    type Output = Number;
+
+    fn mul(self, rhs: &Number) -> Number {
+        &self * rhs
+    }
+}
+
+impl Mul<Number> for &Number {
+    type Output = Number;
+
+    fn mul(self, rhs: Number) -> Number {
+        self * &rhs
+    }
+}
+
+impl Mul for Number {
+    type Output = Number;
+
+    fn mul(self, rhs: Number) -> Number {
+        &self * &rhs
+    }
+}
+
 #[inline]
 pub(crate) fn muladd(digit1: Digit, digit2: Digit, acc: Digit) -> (Digit, Digit) {
     let result: DoubleDigit =
@@ -40,17 +64,12 @@ pub(crate) fn muladd(digit1: Digit, digit2: Digit, acc: Digit) -> (Digit, Digit)
     (result as Digit, (result >> BITS) as Digit)
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_mul() {
-        let a = Number::new("FF234567987654234567BC345679876AA");
-        let b = Number::new("23456789234567890987654323456789ABCD");
-        assert_eq!(
-            format!("{:X}", a * b),
-            "2326FE2EBCB8165C563C61A18818655E7A4B57398825828C0FDB73E2CBCEEB3549422"
-        );
-    }
+#[test]
+fn test_mul() {
+    let a = Number::new("FF234567987654234567BC345679876AA");
+    let b = Number::new("23456789234567890987654323456789ABCD");
+    assert_eq!(
+        format!("{:X}", &a * &b),
+        "2326FE2EBCB8165C563C61A18818655E7A4B57398825828C0FDB73E2CBCEEB3549422"
+    );
 }

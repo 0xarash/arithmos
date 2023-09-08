@@ -3,6 +3,7 @@ use std::fmt;
 pub mod arithmos {
     pub mod addition;
     pub mod multiplication;
+    pub mod power;
     pub mod substraction;
 }
 
@@ -11,6 +12,7 @@ pub(crate) type DoubleDigit = u128;
 
 pub(crate) const BITS: u32 = Digit::BITS;
 
+#[derive(Clone)]
 pub struct Number {
     data: Vec<Digit>,
 }
